@@ -1,0 +1,416 @@
+/* --- GLOBAL STYLES --- */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: #0f0f0f;
+  color: white;
+  overflow: hidden; /* Prevents unwanted layout jumps */
+}
+
+.app-container {
+  display: flex;
+  height: 100vh; /* Fixed full viewport height */
+}
+
+/* --- SIDEBAR STYLING --- */
+.sidebar {
+  width: 220px;
+  background-color: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.4);
+}
+
+.sidebar h2 { 
+  color: #facc15; 
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 22px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  padding: 12px 15px;
+  margin: 6px 0;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.3s;
+  font-weight: 500;
+}
+
+.sidebar ul li:hover {
+  background-color: #facc15;
+  color: black;
+}
+
+/* --- MAIN CONTENT AREA --- */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; 
+  overflow: hidden; /* Locks main area to prevent double scrolling */
+}
+
+/* --- FIXED HEADER & NAVBAR --- */
+.fixed-header-wrapper {
+  flex-shrink: 0; /* Prevents header from shrinking when content grows */
+  background-color: #0f0f0f;
+  z-index: 100;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1c1c1c;
+  padding: 10px 20px;
+  border-bottom: 2px solid #facc15;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
+.navbar h1 {
+  font-size: 24px;
+  color: #facc15;
+}
+
+/* --- MOVIE SECTION (ONLY THIS PART SCROLLS) --- */
+.movie-grid-container {
+  flex: 1;
+  overflow-y: auto; /* Enables vertical scrolling for movies */
+  padding: 20px;
+  scrollbar-width: none; /* Hides scrollbar in Firefox */
+}
+
+.movie-grid-container::-webkit-scrollbar {
+  display: none; /* Hides scrollbar in Chrome/Safari */
+}
+
+/* Ensure movie-section takes full height to enable child scrolling */
+.movie-section {
+  display: flex;
+  flex-direction: column;
+  height: 100%; 
+  overflow: hidden;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  font-size: 24px; 
+  color: #facc15;
+}
+
+.section-header select {
+  background-color: #1a1a1a;
+  color: white;
+  border: 1px solid #facc15;
+  border-radius: 6px;
+  padding: 5px 10px;
+}
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+/* --- MOVIE CARD STYLING --- */
+.movie-card {
+  background-color: #1a1a1a;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: 0.3s;
+  cursor: pointer;
+  position: relative;
+}
+
+.movie-card:hover { 
+  transform: scale(1.05);
+  box-shadow: 0px 0px 15px #facc15;
+}
+
+.movie-card img {
+  width: 100%;
+  height: 270px;
+  object-fit: cover;
+}
+
+.movie-card h3 {
+  text-align: center;
+  font-size: 16px;
+  color: #facc15;
+  margin: 10px 0 5px 0;
+}
+
+.movie-card p {
+  text-align: center;
+  font-size: 13px;
+  color: #ccc;
+  margin-bottom: 10px; 
+}
+
+/* --- FAVORITE BUTTON --- */
+.fav-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  font-size: 20px;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* --- MOVIE MODAL (FIXED FOR MOBILE) --- */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.9); /* Darker background for better focus */
+  display: flex; justify-content: center; align-items: center;
+  z-index: 9999 !important; /* Higher z-index to cover fixed mobile header */
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  position: relative;
+  background: #1a1a1a;
+  color: white;
+  border: 2px solid #facc15;
+  border-radius: 12px;
+  padding: 30px 20px 20px 20px;
+  text-align: center;
+  width: 90%;
+  max-width: 320px;
+  max-height: 85vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.modal-content::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-image {
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+/* --- SEARCH & FILTER CONTROLS --- */
+.search-input {
+  width: 350px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border: 2px solid #facc15;
+  background-color: #111;
+  color: white;
+  outline: none;
+}
+
+.filter-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  margin-top: 16px;
+  margin-bottom: 10px;
+}
+
+/* Center fix for the 'No Movie Found' text */
+.no-movie {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 20px;
+  color: #facc15;
+  margin-top: 50px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  /* Locks the container and prevents body scrolling on mobile */
+  .app-container {
+    flex-direction: column;
+    height: 100vh; 
+    overflow: hidden; 
+  }
+
+  /* Keeps sidebar at the top as a fixed horizontal navigation menu */
+  .sidebar {
+    width: 100% !important;
+    height: auto !important;
+    padding: 8px 10px;
+    background-color: #1a1a1a;
+    z-index: 1001;
+    flex-shrink: 0;
+    border-bottom: 1px solid #333;
+    box-sizing: border-box;
+  }
+
+  .sidebar h2 {
+    margin-bottom: 5px;
+    font-size: 16px;
+  }
+
+  .sidebar ul {
+    display: flex;
+    justify-content: flex-start; /* Items start from left */
+    gap: 8px;
+    flex-wrap: nowrap; 
+    overflow-x: auto; /* Side-scrolling for menu */
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .sidebar ul::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sidebar ul li {
+    padding: 5px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    background: #252525;
+  }
+
+  /* Sticky wrapper for Search and Sort options */
+  .fixed-header-wrapper {
+    position: sticky !important;
+    top: 0;
+    z-index: 1000;
+    background-color: #0f0f0f;
+    flex-shrink: 0;
+    border-bottom: 1px solid #333;
+  }
+
+  .navbar {
+    padding: 5px 15px;
+    flex-direction: row; 
+    justify-content: space-between; /* Space for logo and title */
+  }
+
+  .navbar h1 { font-size: 16px; margin: 0; }
+  .logo { width: 25px; height: 25px; }
+
+  /* Horizontal Filter Controls to save vertical space */
+  .filter-controls {
+    padding: 8px 15px;
+    gap: 10px;
+    flex-direction: row !important; /* Keep items in one line */
+    display: flex;
+    overflow-x: auto; /* Enable side scroll for filters */
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filter-controls::-webkit-scrollbar { display: none; }
+
+  .search-input {
+    width: 180px !important; /* Fixed width for inline look */
+    min-width: 150px;
+    padding: 8px 12px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .filter-controls select {
+    width: auto !important;
+    padding: 8px;
+    background: #1a1a1a;
+    color: white;
+    border: 1px solid #facc15;
+    border-radius: 6px;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  /* Shrink section title to save space */
+  .section-header {
+    padding: 5px 15px;
+    margin-bottom: 0;
+  }
+  .section-header h2 { font-size: 14px; margin: 0; }
+
+  /*only the movies area scrolls */
+  .content {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .movie-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .movie-grid-container {
+    flex: 1;
+    overflow-y: auto !important; 
+    padding: 10px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .movie-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+  }
+
+  /*modal fits and stays above everything */
+  .modal-overlay {
+    z-index: 9999 !important;
+  }
+
+  .modal-content {
+    width: 90% !important;
+    max-width: 320px;
+    padding: 20px;
+  }
+}
+
+/* Small device adjustments */
+@media (max-width: 480px) {
+  .movie-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px;
+  }
+  
+  .navbar h1 { font-size: 15px; }
+  .sidebar h2 { font-size: 15px; }
+}
